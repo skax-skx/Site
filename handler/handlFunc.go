@@ -1,3 +1,4 @@
+// Пакет обработки handler
 package handler
 
 import (
@@ -15,6 +16,10 @@ type Request struct {
 	Password string `json:"password"`
 }
 
+// Register возвращает HTTP обработчик для регистрации нового
+// пользователя. Обработчик принимает только POST запросы,
+// декодирует запрос из JSON, проверяет длинну пароля и ника,
+// регистрирует пользователя в бд.
 func Register(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -60,6 +65,10 @@ func Register(db *sql.DB) http.HandlerFunc {
 	}
 }
 
+// Login возвращает HTTP обработчик, он
+// принимает только POST запросы, декодирует
+// запрос из JSON, проверяет есть ли пользователь в бд,
+// отправляет куки.
 func Login(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -105,6 +114,9 @@ func Login(db *sql.DB) http.HandlerFunc {
 	}
 }
 
+// Logout возвращает HTTP обработчик, который
+// удаляет куки и перенаправляет пользователя
+// на страницу логина.
 func Logout() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &http.Cookie{
